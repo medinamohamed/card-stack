@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 const CardStack = () => {
@@ -36,6 +36,22 @@ const CardStack = () => {
 };
 
 const App = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Check for mobile width
+    };
+
+    // Initial check
+    handleResize();
+
+    // Listen for window resize
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="App">
       {/* Add a video element for background */}
@@ -47,6 +63,13 @@ const App = () => {
       </div>
       {/* Render the CardStack */}
       <CardStack />
+      
+      {/* Mobile-only disclaimer */}
+      {isMobile && (
+        <div className="mobile-disclaimer">
+          This website is best viewed on a desktop.
+        </div>
+      )}
     </div>
   );
 };
